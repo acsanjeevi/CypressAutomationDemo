@@ -1,0 +1,41 @@
+{
+  "name": "cypress-automation-demo",
+  "version": "1.0.0",
+  "description": "OrangeHRM Cypress Automation with TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run --spec \"cypress/e2e/login-authentication/**/*.cy.ts,cypress/e2e/employee-management/**/*.cy.ts,cypress/e2e/user-management/**/*.cy.ts,cypress/e2e/leave-management/**/*.cy.ts,cypress/e2e/data-cleanup/**/*.cy.ts\"",
+    "cypress:run:chrome": "cypress run --browser chrome --spec \"cypress/e2e/login-authentication/**/*.cy.ts,cypress/e2e/employee-management/**/*.cy.ts,cypress/e2e/user-management/**/*.cy.ts,cypress/e2e/leave-management/**/*.cy.ts,cypress/e2e/data-cleanup/**/*.cy.ts\"",
+    "cypress:run:edge": "cypress run --browser edge --spec \"cypress/e2e/login-authentication/**/*.cy.ts,cypress/e2e/employee-management/**/*.cy.ts,cypress/e2e/user-management/**/*.cy.ts,cypress/e2e/leave-management/**/*.cy.ts,cypress/e2e/data-cleanup/**/*.cy.ts\"",
+    "cypress:run:firefox": "cypress run --browser firefox --spec \"cypress/e2e/login-authentication/**/*.cy.ts,cypress/e2e/employee-management/**/*.cy.ts,cypress/e2e/user-management/**/*.cy.ts,cypress/e2e/leave-management/**/*.cy.ts,cypress/e2e/data-cleanup/**/*.cy.ts\"",
+    "cypress:headless": "cypress run --headless",
+    "test": "cypress run --headless",
+    "test:chrome": "cypress run --browser chrome --spec \"cypress/e2e/**/*.cy.ts\"",
+    "test:firefox": "cypress run --browser firefox --spec \"cypress/e2e/**/*.cy.ts\"",
+    "test:edge": "cypress run --browser edge --spec \"cypress/e2e/**/*.cy.ts\"",
+    "test:all-browsers": "npm run test:firefox && npm run test:edge && npm run test:chrome",
+    "report:merge": "mochawesome-merge \"cypress/reports/mochawesome-report/*.json\" -o cypress/reports/merged-report.json && node generateReport.js",
+    "report:generate": "mochawesome-report-generator cypress/reports/report.json -o cypress/reports/html",
+    "report:unified": "node generateUnifiedReport.js",
+    "report:clean": "del /q cypress\\reports 2>nul || exit 0",
+    "cypress:full": "npm run cypress:run && npm run report:merge && npm run report:unified"
+  },
+  "keywords": [
+    "cypress",
+    "typescript",
+    "orangehrm",
+    "automation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.10.6",
+    "cypress": "^13.6.2",
+    "mochawesome": "^7.1.4",
+    "mochawesome-merge": "^5.1.0",
+    "mochawesome-report-generator": "^6.3.2",
+    "typescript": "^5.3.3"
+  }
+}

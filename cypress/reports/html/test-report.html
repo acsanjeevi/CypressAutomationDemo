@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cypress Test Report - All Modules</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .summary-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+        .summary-card.passed .value { color: #4caf50; }
+        .summary-card.failed .value { color: #f44336; }
+        .summary-card.total .value { color: #2196f3; }
+        .summary-card.duration .value { color: #ff9800; }
+        
+        .modules-container {
+            padding: 30px;
+        }
+        
+        .module {
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .module-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+        
+        .module-header:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #663a91 100%);
+        }
+        
+        .module-header h2 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+        
+        .module-header .badge {
+            display: flex;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        
+        .module-header .status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .module-header .status.passed {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .module-header .status.failed {
+            background: #f44336;
+            color: white;
+        }
+        
+        .module-header .toggle {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+        
+        .module-header.collapsed .toggle {
+            transform: rotate(-90deg);
+        }
+        
+        .module-content {
+            padding: 20px;
+            background: #fafafa;
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .module-content.collapsed {
+            max-height: 0;
+            padding: 0 20px;
+        }
+        
+        .tests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .test-case {
+            padding: 15px;
+            background: white;
+            border-left: 4px solid #999;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .test-case.passed {
+            border-left-color: #4caf50;
+        }
+        
+        .test-case.failed {
+            border-left-color: #f44336;
+        }
+        
+        .test-info {
+            flex: 1;
+        }
+        
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .test-duration {
+            font-size: 0.9em;
+            color: #999;
+        }
+        
+        .test-result {
+            font-weight: bold;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .test-result.passed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .test-result.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .timestamp {
+            font-size: 0.9em;
+            color: #999;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Cypress Test Report</h1>
+            <p>Complete Test Execution Summary - All Modules</p>
+        </div>
+        
+        <div class="summary">
+            <div class="summary-card total">
+                <h3>Total Tests</h3>
+                <div class="value">114</div>
+            </div>
+            <div class="summary-card passed">
+                <h3>Passed ✓</h3>
+                <div class="value">79</div>
+            </div>
+            <div class="summary-card failed">
+                <h3>Failed ✗</h3>
+                <div class="value">12</div>
+            </div>
+            <div class="summary-card duration">
+                <h3>Duration</h3>
+                <div class="value">2040.5s</div>
+            </div>
+        </div>
+        
+        <div class="modules-container">
+            
+                <div class="module">
+                    <div class="module-header" onclick="toggleModule(this)">
+                        <div>
+                            <h2>Test Module</h2>
+                        </div>
+                        <div class="badge">
+                            <span class="status failed">
+                                102 ✓ 12 ✗
+                            </span>
+                            <span class="toggle">▼</span>
+                        </div>
+                    </div>
+                    <div class="module-content">
+                        <div class="tests-list">
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 41482ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 13007ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 46728ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 14000ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 13192ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 20097ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 46362ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 18768ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 43906ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 43479ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 52714ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_001: Validate successful login with valid admin credentials</div>
+                                        <div class="test-duration">Duration: 18396ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 11380ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10084ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10383ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10234ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10241ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10817ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10010ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10465ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 22090ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10185ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 22070ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_002: Validate error message for invalid username</div>
+                                        <div class="test-duration">Duration: 10585ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 13304ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 10306ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 12103ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 10503ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 10865ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 10769ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 13973ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 10792ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 10670ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 17755ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 18799ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_003: Validate error message for invalid password</div>
+                                        <div class="test-duration">Duration: 11563ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 6488ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 6507ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 12977ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 6539ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 6577ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 7257ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 6547ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 6809ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 6871ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 7040ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 8459ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_004: Validate error message when username field is empty</div>
+                                        <div class="test-duration">Duration: 6657ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6071ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6119ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 9301ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6174ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6539ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6178ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6156ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 7495ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6564ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6249ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 10416ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_005: Validate error message when password field is empty</div>
+                                        <div class="test-duration">Duration: 6391ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 1231ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 1179ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 1415ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 1170ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 1211ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 1253ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 48226ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 33071ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 54624ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_006: Validate employee creation and data storage in PIM module</div>
+                                        <div class="test-duration">Duration: 20606ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 1215ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 1181ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 1319ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 1195ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 1213ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case failed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 1399ms</div>
+                                    </div>
+                                    <div class="test-result failed">
+                                        ✗ FAIL
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 20007ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 12576ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_007: Validate user creation with admin role in Admin module</div>
+                                        <div class="test-duration">Duration: 13898ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Validate test data documentation and cleanup verification</div>
+                                        <div class="test-duration">Duration: 8376ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Validate test data documentation and cleanup verification</div>
+                                        <div class="test-duration">Duration: 7998ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Validate test data documentation and cleanup verification</div>
+                                        <div class="test-duration">Duration: 43539ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Validate test data documentation and cleanup verification</div>
+                                        <div class="test-duration">Duration: 8878ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Validate test data documentation and cleanup verification</div>
+                                        <div class="test-duration">Duration: 12202ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Validate test data documentation and cleanup verification</div>
+                                        <div class="test-duration">Duration: 11545ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Validate test data documentation and cleanup verification</div>
+                                        <div class="test-duration">Duration: 9358ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Apply leave for created employee and verify successful submission</div>
+                                        <div class="test-duration">Duration: 71ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Apply leave for created employee and verify successful submission</div>
+                                        <div class="test-duration">Duration: 40ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Apply leave for created employee and verify successful submission</div>
+                                        <div class="test-duration">Duration: 38ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_008: Apply leave for created employee and verify successful submission</div>
+                                        <div class="test-duration">Duration: 75ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_009: Cancel applied leave and verify successful removal</div>
+                                        <div class="test-duration">Duration: 71ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_009: Cancel applied leave and verify successful removal</div>
+                                        <div class="test-duration">Duration: 35ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_009: Cancel applied leave and verify successful removal</div>
+                                        <div class="test-duration">Duration: 41ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_009: Cancel applied leave and verify successful removal</div>
+                                        <div class="test-duration">Duration: 26ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_010: Verify test data creation and document cleanup progress</div>
+                                        <div class="test-duration">Duration: 44264ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_010: Verify test data creation and document cleanup progress</div>
+                                        <div class="test-duration">Duration: 10986ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_010: Verify test data creation and document cleanup progress</div>
+                                        <div class="test-duration">Duration: 10925ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_010: Verify test data creation and document cleanup progress</div>
+                                        <div class="test-duration">Duration: 11605ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_010: Verify test data creation and document cleanup progress</div>
+                                        <div class="test-duration">Duration: 40561ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_011: Cancel all applied leave requests</div>
+                                        <div class="test-duration">Duration: 60ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_011: Cancel all applied leave requests</div>
+                                        <div class="test-duration">Duration: 53ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_011: Cancel all applied leave requests</div>
+                                        <div class="test-duration">Duration: 54ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_011: Cancel all applied leave requests</div>
+                                        <div class="test-duration">Duration: 43ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_011: Cancel all applied leave requests</div>
+                                        <div class="test-duration">Duration: 28ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_012: Delete all created user accounts</div>
+                                        <div class="test-duration">Duration: 45ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_012: Delete all created user accounts</div>
+                                        <div class="test-duration">Duration: 24ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_012: Delete all created user accounts</div>
+                                        <div class="test-duration">Duration: 18ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_012: Delete all created user accounts</div>
+                                        <div class="test-duration">Duration: 41ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_012: Delete all created user accounts</div>
+                                        <div class="test-duration">Duration: 27ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_013: Delete all created employee records</div>
+                                        <div class="test-duration">Duration: 55ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_013: Delete all created employee records</div>
+                                        <div class="test-duration">Duration: 37ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_013: Delete all created employee records</div>
+                                        <div class="test-duration">Duration: 23ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_013: Delete all created employee records</div>
+                                        <div class="test-duration">Duration: 40ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                                <div class="test-case passed">
+                                    <div class="test-info">
+                                        <div class="test-title">TC_013: Delete all created employee records</div>
+                                        <div class="test-duration">Duration: 16ms</div>
+                                    </div>
+                                    <div class="test-result passed">
+                                        ✓ PASS
+                                    </div>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+        
+        <div class="footer">
+            <p><strong>Test Execution Complete</strong></p>
+            <p>All modules executed successfully and consolidated into this single report</p>
+            <div class="timestamp">Generated: 2/2/2026, 8:45:19 pm</div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleModule(header) {
+            const content = header.nextElementSibling;
+            header.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        }
+        
+        // Expand first module by default
+        window.addEventListener('load', () => {
+            const firstHeader = document.querySelector('.module-header');
+            if (firstHeader) {
+                const content = firstHeader.nextElementSibling;
+                if (!content.classList.contains('collapsed')) {
+                    toggleModule(firstHeader);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

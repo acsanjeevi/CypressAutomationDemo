@@ -1,0 +1,116 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 0,
+    "pending": 0,
+    "failures": 1,
+    "start": "2026-02-03T03:18:16.283Z",
+    "end": "2026-02-03T03:19:24.372Z",
+    "duration": 68089,
+    "testsRegistered": 1,
+    "passPercent": 0,
+    "pendingPercent": 0,
+    "other": 1,
+    "hasOther": true,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "261babf8-cab5-433b-9e04-f3217d21ffd6",
+      "title": "",
+      "fullFile": "cypress\\e2e\\user-management\\user-create-management.cy.ts",
+      "file": "cypress\\e2e\\user-management\\user-create-management.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "691def3e-2785-4412-a172-b9367648b00f",
+          "title": "Admin Module - User Management",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "TC_007: Validate user creation with admin role in Admin module",
+              "fullTitle": "Admin Module - User Management TC_007: Validate user creation with admin role in Admin module",
+              "timedOut": null,
+              "duration": 1344,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "// ARRANGE: Load test data from fixtures\nconst adminCredentials = this.credentials.admin;\nconst userTestData = this.testdata.user;\n// Get previously created employee data for employee assignment\nconst employeeRecords = (0,_support_testDataHelper__WEBPACK_IMPORTED_MODULE_3__.getEmployeeData)();\nconst assignedEmployeeName = employeeRecords.length > 0\n    ? `${employeeRecords[employeeRecords.length - 1].firstName} ${employeeRecords[employeeRecords.length - 1].lastName}`\n    : 'John Doe'; // Default fallback if no employee exists\n// Create user information with unique credentials\nuserInformation = {\n    username: `DemoUser_${uniqueTimestampCounter}`,\n    password: `DemoPass@${uniqueTimestampCounter}`,\n    role: userTestData.role,\n    employeeName: assignedEmployeeName,\n    status: userTestData.status,\n    createdAt: new Date().toISOString()\n};\n// ACT: Perform login with admin credentials\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].login(adminCredentials.username, adminCredentials.password);\ncy.wait(3000);\n// Verify successful login by checking dashboard heading visibility\ncy.get('.oxd-topbar-header-breadcrumb h6', { timeout: 20000 }).should('be.visible');\n_pages_DashboardPage__WEBPACK_IMPORTED_MODULE_1__[\"default\"].verifyUserIsOnDashboard();\n// Navigate to Admin module\ncy.wait(2000);\n_pages_DashboardPage__WEBPACK_IMPORTED_MODULE_1__[\"default\"].navigateToAdmin();\ncy.wait(3000);\n// ASSERT: Add user with role, employee assignment, and status\n_pages_AdminPage__WEBPACK_IMPORTED_MODULE_2__[\"default\"].addUser({\n    role: userInformation.role,\n    employeeName: userInformation.employeeName,\n    status: userInformation.status,\n    username: userInformation.username,\n    password: userInformation.password\n});\n// Persist user data to JSON file for cleanup reference\n(0,_support_testDataHelper__WEBPACK_IMPORTED_MODULE_3__.saveUserData)(userInformation);\ncy.log(`✓ User successfully created with username: ${userInformation.username}`);\ncy.log(`✓ User assigned to employee: ${userInformation.employeeName}`);\ncy.log(`✓ User data persisted for audit trail and cleanup`);\ncy.log('✓ TC_007 PASSED - User creation and data storage verified');",
+              "err": {
+                "message": "CypressError: `cy.click()` failed because it requires a DOM element.\n\nNo elements in the current DOM matched your query:\n\n  > cy.get(a[href=\"/web/index.php/auth/logout\"])\n\nBecause this error occurred during a `after each` hook we are skipping the remaining tests in the current suite: `Admin Module - User Management`",
+                "estack": "CypressError: `cy.click()` failed because it requires a DOM element.\n\nNo elements in the current DOM matched your query:\n\n  > cy.get(a[href=\"/web/index.php/auth/logout\"])\n\nBecause this error occurred during a `after each` hook we are skipping the remaining tests in the current suite: `Admin Module - User Management`\n    at isElement (https://opensource-demo.orangehrmlive.com/__cypress/runner/cypress_runner.js:144996:62)\n    at validateType (https://opensource-demo.orangehrmlive.com/__cypress/runner/cypress_runner.js:144854:14)\n    at Object.isType (https://opensource-demo.orangehrmlive.com/__cypress/runner/cypress_runner.js:144885:7)\n    at $Cy.pushSubject (https://opensource-demo.orangehrmlive.com/__cypress/runner/cypress_runner.js:138534:22)\n    at wrapped (https://opensource-demo.orangehrmlive.com/__cypress/runner/cypress_runner.js:138091:19)\nFrom Your Spec Code:\n    at DashboardPage.logout (webpack://cypress-automation-demo/./cypress/pages/DashboardPage.ts:70:36)\n    at Context.eval (webpack://cypress-automation-demo/./cypress/e2e/user-management/user-create-management.cy.ts:98:18)",
+                "diff": null
+              },
+              "uuid": "6e384751-1e10-4ef6-b380-e2cd82740c80",
+              "parentUUID": "691def3e-2785-4412-a172-b9367648b00f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [],
+          "failures": [
+            "6e384751-1e10-4ef6-b380-e2cd82740c80"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 1344,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome-[status]_[datetime]",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/mochawesome-report",
+        "reportFilename": "mochawesome-[status]_[datetime]",
+        "quiet": false,
+        "overwrite": false,
+        "html": true,
+        "json": true,
+        "charts": true,
+        "embeddedScreenshots": true,
+        "inlineAssets": true,
+        "saveJson": true,
+        "saveHtml": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "employee": {
+    "firstName": "DemoEmployee",
+    "middleName": "Test",
+    "lastName": "Demo"
+  },
+  "user": {
+    "role": "Admin",
+    "status": "Enabled"
+  },
+  "leave": {
+    "leaveType": "Annual",
+    "reason": "Planned vacation leave"
+  },
+  "testEnvironment": {
+    "baseUrl": "https://opensource-demo.orangehrmlive.com",
+    "defaultTimeout": 10000
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "stats": {
+    "suites": 2,
+    "tests": 5,
+    "passes": 5,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-02-03T03:25:15.277Z",
+    "end": "2026-02-03T03:26:41.670Z",
+    "duration": 86393,
+    "testsRegistered": 5,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "739f989b-8bc1-420a-aabb-7a883a34d913",
+      "title": "",
+      "fullFile": "cypress\\e2e\\login-authentication\\login-authentication.cy.ts",
+      "file": "cypress\\e2e\\login-authentication\\login-authentication.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "bbc349b7-4135-4e39-916d-63ecc3653ef1",
+          "title": "Login Module - Positive Authentication Scenarios",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "TC_001: Validate successful login with valid admin credentials",
+              "fullTitle": "Login Module - Positive Authentication Scenarios TC_001: Validate successful login with valid admin credentials",
+              "timedOut": null,
+              "duration": 42773,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const adminUsername = this.credentials.admin.username;\nconst adminPassword = this.credentials.admin.password;\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].login(adminUsername, adminPassword);\ncy.wait(3000);\n_pages_DashboardPage__WEBPACK_IMPORTED_MODULE_1__[\"default\"].verifyUserIsOnDashboard();\ncy.log('✓ TC_001 PASSED');",
+              "err": {},
+              "uuid": "efcb8742-29df-42ba-85d3-c4273492b062",
+              "parentUUID": "bbc349b7-4135-4e39-916d-63ecc3653ef1",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "efcb8742-29df-42ba-85d3-c4273492b062"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 42773,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "46e6a75d-e21c-4ee4-8b24-77877e05a467",
+          "title": "Login Module - Negative Authentication Scenarios",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "TC_002: Validate error message for invalid username",
+              "fullTitle": "Login Module - Negative Authentication Scenarios TC_002: Validate error message for invalid username",
+              "timedOut": null,
+              "duration": 10324,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].enterUsername('InvalidUser@123');\ncy.wait(500);\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].enterPassword('admin123');\ncy.wait(500);\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].clickLoginButton();\ncy.wait(2000);\ncy.get('.oxd-alert-content--error', { timeout: 15000 })\n    .should('be.visible')\n    .should('contain', 'Invalid credentials');\ncy.log('✓ TC_002 PASSED');",
+              "err": {},
+              "uuid": "c7d789f2-38af-4a95-90d0-f241c81be304",
+              "parentUUID": "46e6a75d-e21c-4ee4-8b24-77877e05a467",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "TC_003: Validate error message for invalid password",
+              "fullTitle": "Login Module - Negative Authentication Scenarios TC_003: Validate error message for invalid password",
+              "timedOut": null,
+              "duration": 10414,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].enterUsername('Admin');\ncy.wait(500);\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].enterPassword('wrongpassword@123');\ncy.wait(500);\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].clickLoginButton();\ncy.wait(2000);\ncy.get('.oxd-alert-content--error', { timeout: 15000 })\n    .should('be.visible')\n    .should('contain', 'Invalid credentials');\ncy.log('✓ TC_003 PASSED');",
+              "err": {},
+              "uuid": "7065ac62-c56e-4188-80fe-7aec0726615c",
+              "parentUUID": "46e6a75d-e21c-4ee4-8b24-77877e05a467",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "TC_004: Validate error message when username field is empty",
+              "fullTitle": "Login Module - Negative Authentication Scenarios TC_004: Validate error message when username field is empty",
+              "timedOut": null,
+              "duration": 6487,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// Leave username empty and just enter password\ncy.get('input[name=\"username\"]').should('exist').should('have.value', '');\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].enterPassword('admin123');\ncy.wait(500);\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].clickLoginButton();\ncy.wait(2000);\n// Check for any validation error message  \ncy.get('span', { timeout: 15000 })\n    .contains(/required|Required/)\n    .should('be.visible');\ncy.log('✓ TC_004 PASSED');",
+              "err": {},
+              "uuid": "98ab2f1f-5d44-4d6a-b885-b26674d709c0",
+              "parentUUID": "46e6a75d-e21c-4ee4-8b24-77877e05a467",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "TC_005: Validate error message when password field is empty",
+              "fullTitle": "Login Module - Negative Authentication Scenarios TC_005: Validate error message when password field is empty",
+              "timedOut": null,
+              "duration": 6227,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].enterUsername('Admin');\ncy.wait(500);\ncy.get('input[name=\"password\"]').should('exist').should('have.value', '');\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].clickLoginButton();\ncy.wait(2000);\n// Check for any validation error message\ncy.get('span', { timeout: 15000 })\n    .contains(/required|Required/)\n    .should('be.visible');\ncy.log('✓ TC_005 PASSED');",
+              "err": {},
+              "uuid": "4ae33c16-1e00-4144-8cfa-f68ff912dcf2",
+              "parentUUID": "46e6a75d-e21c-4ee4-8b24-77877e05a467",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "c7d789f2-38af-4a95-90d0-f241c81be304",
+            "7065ac62-c56e-4188-80fe-7aec0726615c",
+            "98ab2f1f-5d44-4d6a-b885-b26674d709c0",
+            "4ae33c16-1e00-4144-8cfa-f68ff912dcf2"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 33452,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome-[status]_[datetime]",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/mochawesome-report",
+        "reportFilename": "mochawesome-[status]_[datetime]",
+        "quiet": false,
+        "overwrite": false,
+        "html": true,
+        "json": true,
+        "charts": true,
+        "embeddedScreenshots": true,
+        "inlineAssets": true,
+        "saveJson": true,
+        "saveHtml": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}

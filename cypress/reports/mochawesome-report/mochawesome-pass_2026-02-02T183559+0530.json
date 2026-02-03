@@ -1,0 +1,112 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-02-02T13:05:38.537Z",
+    "end": "2026-02-02T13:05:59.682Z",
+    "duration": 21145,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "0dec0a52-6d16-4aa1-a6bf-ffe640b056f0",
+      "title": "",
+      "fullFile": "cypress\\e2e\\02-pim\\employee-management.cy.ts",
+      "file": "cypress\\e2e\\02-pim\\employee-management.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "b8c15c5c-0d09-4654-9a00-4499ce8289a4",
+          "title": "PIM Module - Employee Management",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "TC_006: Validate employee creation and data storage in PIM module",
+              "fullTitle": "PIM Module - Employee Management TC_006: Validate employee creation and data storage in PIM module",
+              "timedOut": null,
+              "duration": 20606,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "/**\n * ARRANGE: Prepare test data\n * Load credentials and employee test data from fixtures\n * Generate unique employee names using timestamp counter\n */\nconst adminCredentials = this.credentials.admin;\nconst employeeTestData = this.testdata.employee;\nemployeeInformation = {\n    firstName: employeeTestData.firstName + '_' + uniqueTimestampCounter,\n    middleName: employeeTestData.middleName,\n    lastName: employeeTestData.lastName + '_' + uniqueTimestampCounter,\n    createdAt: new Date().toISOString()\n};\n/**\n * ACT: Login and navigate to PIM module\n */\n_pages_LoginPage__WEBPACK_IMPORTED_MODULE_0__[\"default\"].login(adminCredentials.username, adminCredentials.password);\ncy.wait(3000);\ncy.get('.oxd-topbar-header-breadcrumb h6', { timeout: 20000 }).should('be.visible');\ncy.wait(3000);\n// Navigate to PIM\ncy.contains('a', 'PIM', { timeout: 15000 }).click();\ncy.wait(3000);\ncy.get('h6', { timeout: 20000 }).contains(/PIM|Employee/).should('exist');\ncy.wait(2000);\n/**\n * ASSERT: Verify PIM navigation success\n */\ncy.log(`✓ Successfully navigated to PIM module`);\ncy.log(`✓ Employee First Name to be added: ${employeeInformation.firstName}`);\ncy.log(`✓ Employee Last Name to be added: ${employeeInformation.lastName}`);\ncy.log('✓ TC_006 PASSED: User can access PIM module for employee management');",
+              "err": {},
+              "uuid": "d05289fe-f18a-4b48-9cb0-250c27f97a33",
+              "parentUUID": "b8c15c5c-0d09-4654-9a00-4499ce8289a4",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "d05289fe-f18a-4b48-9cb0-250c27f97a33"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 20606,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome-[status]_[datetime]",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/mochawesome-report",
+        "reportFilename": "mochawesome-[status]_[datetime]",
+        "quiet": false,
+        "overwrite": false,
+        "html": true,
+        "json": true,
+        "charts": true,
+        "embeddedScreenshots": true,
+        "inlineAssets": true,
+        "saveJson": true,
+        "saveHtml": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}
