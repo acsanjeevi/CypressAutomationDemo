@@ -16,9 +16,9 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 
 // Log test start and end
 beforeEach(() => {
-  cy.log('Starting test...');
+  // Test setup
 });
 
 afterEach(() => {
-  cy.log('Test completed');
+  // Test cleanup
 });

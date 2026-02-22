@@ -1,19 +1,26 @@
 {
   "employee": {
-    "firstName": "DemoEmployee",
-    "middleName": "Test",
-    "lastName": "Demo"
+    "firstName": "AutoTest",
+    "middleName": "Cypress",
+    "lastName": "Employee"
   },
   "user": {
+    "Employee": "AutoTest Cypress Employee",
     "role": "Admin",
-    "status": "Enabled"
+    "status": "Enabled",
+    "username": "automationuser",
+    "password": "UserPass@123"
   },
   "leave": {
     "leaveType": "Annual",
+    "fromDate": "2026-03-15",
+    "toDate": "2026-03-20",
     "reason": "Planned vacation leave"
   },
-  "testEnvironment": {
-    "baseUrl": "https://opensource-demo.orangehrmlive.com",
-    "defaultTimeout": 10000
+  "claim": {
+    "eventType": "Business Training",
+    "claimType": "Travel",
+    "amount": 500,
+    "remarks": "Test claim submission"
   }
 }

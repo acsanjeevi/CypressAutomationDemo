@@ -1,0 +1,74 @@
+[
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-12T12:06:53.996Z"
+  },
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-12T12:26:18.082Z"
+  },
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-13T05:56:10.772Z"
+  },
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-13T09:27:22.765Z"
+  },
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-15T15:03:16.103Z"
+  },
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-15T15:28:21.142Z"
+  },
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-15T15:37:42.049Z"
+  },
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-15T15:47:05.600Z"
+  },
+  {
+    "employeeName": "Admin User",
+    "claimType": "Travel",
+    "amount": 500,
+    "currency": "USD",
+    "description": "Business travel expenses",
+    "createdAt": "2026-02-15T15:57:42.461Z"
+  }
+]

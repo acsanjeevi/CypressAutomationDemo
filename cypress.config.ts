@@ -2,6 +2,33 @@ import { defineConfig } from 'cypress';
 import * as fs from 'fs';
 import * as path from 'path';
 
+/**
+ * Clean reports directory before running tests
+ */
+function cleanReportsDirectory() {
+  const reportsDir = path.join(__dirname, 'cypress/reports');
+  if (fs.existsSync(reportsDir)) {
+    try {
+      // Don't clean if we have CYPRESS_REPORT_DIR set (means we're in sequential mode)
+      if (!process.env.CYPRESS_REPORT_DIR) {
+        fs.rmSync(reportsDir, { recursive: true, force: true });
+        console.log('✓ Reports directory cleaned');
+      }
+    } catch (e) {
+      console.error('Error cleaning reports directory:', e);
+    }
+  }
+}
+
+// Get report directory from environment or use default
+const reportDir = process.env.CYPRESS_REPORT_DIR 
+  ? path.resolve(process.env.CYPRESS_REPORT_DIR)
+  : path.join(__dirname, 'cypress/reports/mochawesome-report');
+const reportFilename = 'unified-report';
+
+// Always clean reports on startup to ensure fresh state
+cleanReportsDirectory();
+
 export default defineConfig({
   e2e: {
     baseUrl: 'https://opensource-demo.orangehrmlive.com',
@@ -11,18 +38,21 @@ export default defineConfig({
     requestTimeout: 30000,
     responseTimeout: 30000,
     pageLoadTimeout: 60000,
-    video: true,
-    screenshotOnRunFailure: true,
+    video: false,                      // ✅ Completely disable all video recording
+    //videoOnFailure: false,             // ✅ Disable video on test failure
+    screenshotOnRunFailure: true,      // ✅ Enable screenshots for failed tests
+   // screenshotOnRunFailureFolder: path.join(__dirname, 'cypress/screenshots'),
+    trashAssetsBeforeRuns: false,      // Keep screenshots for analysis
     reporter: 'mochawesome',
     reporterOptions: {
-      reportDir: 'cypress/reports/mochawesome-report',
-      reportFilename: 'mochawesome-[status]_[datetime]',
+      reportDir: reportDir,
+      reportFilename: reportFilename,
       quiet: false,
-      overwrite: false,
+      overwrite: true,
       html: true,
       json: true,
-      charts: true,
-      embeddedScreenshots: true,
+      charts: false,
+      embeddedScreenshots: true,       // Embed screenshots in HTML report
       inlineAssets: true,
       saveJson: true,
       saveHtml: true,

@@ -4,22 +4,19 @@
   "description": "OrangeHRM Cypress Automation with TypeScript",
   "main": "index.js",
   "scripts": {
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run --spec \"cypress/e2e/login-authentication/**/*.cy.ts,cypress/e2e/employee-management/**/*.cy.ts,cypress/e2e/user-management/**/*.cy.ts,cypress/e2e/leave-management/**/*.cy.ts,cypress/e2e/data-cleanup/**/*.cy.ts\"",
-    "cypress:run:chrome": "cypress run --browser chrome --spec \"cypress/e2e/login-authentication/**/*.cy.ts,cypress/e2e/employee-management/**/*.cy.ts,cypress/e2e/user-management/**/*.cy.ts,cypress/e2e/leave-management/**/*.cy.ts,cypress/e2e/data-cleanup/**/*.cy.ts\"",
-    "cypress:run:edge": "cypress run --browser edge --spec \"cypress/e2e/login-authentication/**/*.cy.ts,cypress/e2e/employee-management/**/*.cy.ts,cypress/e2e/user-management/**/*.cy.ts,cypress/e2e/leave-management/**/*.cy.ts,cypress/e2e/data-cleanup/**/*.cy.ts\"",
-    "cypress:run:firefox": "cypress run --browser firefox --spec \"cypress/e2e/login-authentication/**/*.cy.ts,cypress/e2e/employee-management/**/*.cy.ts,cypress/e2e/user-management/**/*.cy.ts,cypress/e2e/leave-management/**/*.cy.ts,cypress/e2e/data-cleanup/**/*.cy.ts\"",
-    "cypress:headless": "cypress run --headless",
-    "test": "cypress run --headless",
-    "test:chrome": "cypress run --browser chrome --spec \"cypress/e2e/**/*.cy.ts\"",
-    "test:firefox": "cypress run --browser firefox --spec \"cypress/e2e/**/*.cy.ts\"",
-    "test:edge": "cypress run --browser edge --spec \"cypress/e2e/**/*.cy.ts\"",
-    "test:all-browsers": "npm run test:firefox && npm run test:edge && npm run test:chrome",
-    "report:merge": "mochawesome-merge \"cypress/reports/mochawesome-report/*.json\" -o cypress/reports/merged-report.json && node generateReport.js",
-    "report:generate": "mochawesome-report-generator cypress/reports/report.json -o cypress/reports/html",
-    "report:unified": "node generateUnifiedReport.js",
-    "report:clean": "del /q cypress\\reports 2>nul || exit 0",
-    "cypress:full": "npm run cypress:run && npm run report:merge && npm run report:unified"
+    "test": "cypress run --spec 'cypress/e2e/login.cy.ts,cypress/e2e/employee.cy.ts,cypress/e2e/user.cy.ts,cypress/e2e/leave.cy.ts,cypress/e2e/claim.cy.ts,cypress/e2e/cleanup.cy.ts' --browser chrome",
+    "test:chrome": "cypress run --browser chrome",
+    "test:firefox": "cypress run --browser firefox",
+    "test:edge": "cypress run --browser edge",
+    "test:headless": "cypress run --headless --browser chrome",
+    "test:headed": "node runTestsHeadedSequential.js",
+    "test:cleanup": "cypress run --spec 'cypress/e2e/cleanup.cy.ts' --browser chrome",
+    "test:all:cleanup": "npm run test && npm run report:all",
+    "report:merge": "node scripts/merge-reports.js --check-reports",
+    "report:generate": "npx mochawesome-report-generator 'cypress/reports/mochawesome-report/unified-report.json' -o 'cypress/reports/mochawesome-report'",
+    "report:all": "npm run report:merge && npm run report:generate",
+    "test:all:report": "npm run test && npm run report:all",
+    "cypress:open": "cypress open"
   },
   "keywords": [
     "cypress",
@@ -36,6 +33,7 @@
     "mochawesome": "^7.1.4",
     "mochawesome-merge": "^5.1.0",
     "mochawesome-report-generator": "^6.3.2",
+    "pptxgenjs": "^4.0.1",
     "typescript": "^5.3.3"
   }
 }

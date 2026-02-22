@@ -42,7 +42,6 @@ export const saveEmployeeData = (employeeData: any): void => {
     filename: 'employees.json', 
     data: employeeData 
   });
-  cy.log(`✓ Employee data persisted: ${employeeData.firstName} ${employeeData.lastName}`);
 };
 
 /**
@@ -68,7 +67,6 @@ export const saveUserData = (userData: any): void => {
     filename: 'users.json', 
     data: userData 
   });
-  cy.log(`✓ User data persisted: ${userData.username}`);
 };
 
 /**
@@ -96,7 +94,6 @@ export const saveLeaveData = (leaveData: any): void => {
     filename: 'leaves.json', 
     data: leaveData 
   });
-  cy.log(`✓ Leave data persisted: ${leaveData.employeeName} (${leaveData.fromDate} to ${leaveData.toDate})`);
 };
 
 /**
@@ -153,7 +150,6 @@ export const getLeaveData = (): any[] => {
  */
 export const clearEmployeeData = (): void => {
   cy.task('deleteFile', 'employees.json');
-  cy.log('✓ Employee data cleared from persistent storage');
 };
 
 /**
@@ -164,7 +160,6 @@ export const clearEmployeeData = (): void => {
  */
 export const clearUserData = (): void => {
   cy.task('deleteFile', 'users.json');
-  cy.log('✓ User data cleared from persistent storage');
 };
 
 /**
@@ -175,7 +170,6 @@ export const clearUserData = (): void => {
  */
 export const clearLeaveData = (): void => {
   cy.task('deleteFile', 'leaves.json');
-  cy.log('✓ Leave data cleared from persistent storage');
 };
 
 /**
@@ -186,6 +180,5 @@ export const clearLeaveData = (): void => {
  */
 export const clearAllTestData = (): void => {
   cy.task('clearDirectory');
-  cy.log('✓ All test data cleared from persistent storage');
 };
 

@@ -1,0 +1,61 @@
+{
+  "login": {
+    "usernameInput": "input[name=\"username\"]",
+    "passwordInput": "input[name=\"password\"]",
+    "loginButton": "button[type=\"submit\"]",
+    "errorMessage": ".oxd-alert-content--error"
+  },
+  "dashboard": {
+    "pageHeading": ".oxd-topbar-header-breadcrumb h6",
+    "userDropdown": ".oxd-userdropdown-tab",
+    "logoutButton": "a:contains(\"Logout\")"
+  },
+  "pim": {
+    "addButton": "button:contains(\"Add\")",
+    "firstNameInput": "input[placeholder=\"First Name\"]",
+    "middleNameInput": "input[placeholder=\"Middle Name\"]",
+    "lastNameInput": "input[placeholder=\"Last Name\"]",
+    "saveButton": "button[type=\"submit\"]",
+    "successNotification": ".oxd-toast--success",
+    "employeeIdField": "input[readonly][placeholder=\"Employee Id\"]",
+    "deleteButton": "button[title=\"Delete\"]",
+    "confirmDeleteButton": "button.oxd-button--danger",
+    "searchInput": "input[placeholder=\"Search\"]"
+  },
+  "admin": {
+    "addUserButton": "button:contains(\"Add\")",
+    "roleDropdown": ".oxd-select-wrapper",
+    "employeeSearchInput": "input[placeholder=\"Type for hints...\"]",
+    "statusDropdown": ".oxd-select-wrapper",
+    "usernameInput": "input[placeholder=\"Username\"]",
+    "passwordInput": "input[placeholder=\"Password\"]",
+    "confirmPasswordInput": "input[placeholder=\"Confirm Password\"]",
+    "saveButton": "button[type=\"submit\"]",
+    "successNotification": ".oxd-toast--success",
+    "deleteUserButton": "button[title=\"Delete\"]",
+    "confirmDeleteButton": "button.oxd-button--danger"
+  },
+  "leave": {
+    "applyButton": "button:contains(\"Apply\")",
+    "leaveTypeDropdown": ".oxd-select-wrapper",
+    "fromDateInput": "input[placeholder=\"yyyy-mm-dd\"]",
+    "toDateInput": "input[placeholder=\"yyyy-mm-dd\"]",
+    "reasonTextarea": "textarea[placeholder=\"Type details...\"]",
+    "submitButton": "button[type=\"submit\"]",
+    "successNotification": ".oxd-toast--success",
+    "leaveTable": ".oxd-table-body",
+    "cancelLeaveButton": "button:contains(\"Cancel\")",
+    "confirmCancelButton": "button.oxd-button--danger"
+  },
+  "claim": {
+    "submitClaimButton": "button:contains(\"Submit Claim\")",
+    "eventTypeDropdown": ".oxd-select-wrapper",
+    "claimTypeDropdown": ".oxd-select-wrapper",
+    "amountInput": "input[placeholder=\"Amount\"]",
+    "proposedAmountInput": "input[placeholder=\"Proposed Amount\"]",
+    "remarksTextarea": "textarea[placeholder=\"Type remarks...\"]",
+    "attachmentInput": "input[type=\"file\"]",
+    "saveButton": "button[type=\"submit\"]",
+    "successNotification": ".oxd-toast--success"
+  }
+}

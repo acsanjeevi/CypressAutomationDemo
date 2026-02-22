@@ -1,0 +1,801 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrangeHRM Cypress Automation Execution Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 2.8em;
+      margin-bottom: 10px;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+    
+    .header p {
+      font-size: 1em;
+      opacity: 0.95;
+    }
+    
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 35px 30px;
+      background: #f8f9fa;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      border-left: 5px solid #667eea;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+    
+    .stat-card.passed {
+      border-left-color: #10b981;
+    }
+    
+    .stat-card.failed {
+      border-left-color: #ef4444;
+    }
+    
+    .stat-card.skipped {
+      border-left-color: #f59e0b;
+    }
+    
+    .stat-card.duration {
+      border-left-color: #3b82f6;
+    }
+    
+    .stat-value {
+      font-size: 3em;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+    
+    .stat-card.passed .stat-value {
+      color: #10b981;
+    }
+    
+    .stat-card.failed .stat-value {
+      color: #ef4444;
+    }
+    
+    .stat-card.skipped .stat-value {
+      color: #f59e0b;
+    }
+    
+    .stat-card.duration .stat-value {
+      color: #3b82f6;
+    }
+    
+    .stat-label {
+      font-size: 0.95em;
+      color: #666;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .progress-section {
+      margin-top: 20px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+      width: 100.00%;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-text {
+      font-size: 0.9em;
+      color: #666;
+      text-align: center;
+    }
+    
+    .tests-section {
+      padding: 35px 30px;
+    }
+    
+    .tests-section h2 {
+      font-size: 1.8em;
+      margin-bottom: 25px;
+      color: #333;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 15px;
+    }
+    
+    .test-item {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-left: 5px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      transition: border-color 0.2s;
+    }
+    
+    .test-item:hover {
+      border-left-color: #667eea;
+    }
+    
+    .test-item.passed {
+      border-left-color: #10b981;
+      background: #f0fdf4;
+    }
+    
+    .test-item.failed {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+    }
+    
+    .test-status {
+      font-size: 2em;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    
+    .test-status.passed {
+      color: #10b981;
+      background: #dcfce7;
+    }
+    
+    .test-status.failed {
+      color: #ef4444;
+      background: #fee2e2;
+    }
+    
+    .test-status.pending {
+      color: #f59e0b;
+      background: #fef3c7;
+    }
+    
+    .test-details {
+      flex: 1;
+    }
+    
+    .test-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      word-break: break-word;
+      font-size: 1.05em;
+    }
+    
+    .test-suite {
+      font-size: 0.9em;
+      color: #666;
+      background: #f3f4f6;
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    
+    .test-meta {
+      font-size: 0.9em;
+      color: #999;
+    }
+    
+    .test-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #ef4444;
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #b91c1c;
+      font-family: 'Courier New', monospace;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    
+    .footer {
+      background: #f8f9fa;
+      padding: 25px 30px;
+      text-align: center;
+      color: #666;
+      font-size: 0.95em;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .timestamp {
+      color: #999;
+      font-size: 0.9em;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 30px;
+      color: #999;
+    }
+    
+    .filter-controls {
+      margin-bottom: 25px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 8px 15px;
+      border: 1px solid #e5e7eb;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+      background: #f3f4f6;
+    }
+    
+    .filter-btn.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🧪 OrangeHRM Cypress Automation Execution Report</h1>
+      <p>Complete Test Suite Execution - All Modules Combined</p>
+    </div>
+    
+    <div class="summary">
+      <div class="stat-card">
+        <div class="stat-value">30</div>
+        <div class="stat-label">Total Tests</div>
+      </div>
+      
+      <div class="stat-card passed">
+        <div class="stat-value">30</div>
+        <div class="stat-label">Passed</div>
+        <div class="progress-section">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          <div class="progress-text"><strong>100.00%</strong> Success</div>
+        </div>
+      </div>
+      
+      <div class="stat-card failed">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Failed</div>
+      </div>
+      
+      <div class="stat-card skipped">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Skipped</div>
+      </div>
+      
+      <div class="stat-card duration">
+        <div class="stat-value">8 Minutes 10 Seconds</div>
+        <div class="stat-label">Total Duration</div>
+      </div>
+    </div>
+    
+    <div class="tests-section">
+      <h2>📊 Test Results - 30 Total Tests</h2>
+      
+        <div class="filter-controls">
+          <button class="filter-btn active" onclick="filterTests('all')">All Tests (30)</button>
+          <button class="filter-btn" onclick="filterTests('passed')">✓ Passed (30)</button>
+          <button class="filter-btn" onclick="filterTests('failed')">✗ Failed (0)</button>
+          
+          
+        </div>
+      
+      
+      
+      
+      <div id="tests-container">
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LOGIN-REPORT / Login</div>
+              <div class="test-title">TC_01. Login with valid admin credentials</div>
+              <div class="test-meta">⏱ Duration: 14187ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LOGIN-REPORT / Login</div>
+              <div class="test-title">TC_02. Verify login page loaded with all fields</div>
+              <div class="test-meta">⏱ Duration: 2599ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LOGIN-REPORT / Login</div>
+              <div class="test-title">TC_03. Login with empty username - shows error</div>
+              <div class="test-meta">⏱ Duration: 2670ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LOGIN-REPORT / Login</div>
+              <div class="test-title">TC_04. Login with invalid password - shows error</div>
+              <div class="test-meta">⏱ Duration: 5543ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LOGIN-REPORT / Login</div>
+              <div class="test-title">TC_05. Login redirects to dashboard</div>
+              <div class="test-meta">⏱ Duration: 12806ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">EMPLOYEE-REPORT / Employee</div>
+              <div class="test-title">TC_06. Create employee with valid data</div>
+              <div class="test-meta">⏱ Duration: 26081ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">EMPLOYEE-REPORT / Employee</div>
+              <div class="test-title">TC_07. Verify employee ID generated</div>
+              <div class="test-meta">⏱ Duration: 19649ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">EMPLOYEE-REPORT / Employee</div>
+              <div class="test-title">TC_08. Navigate to employee list page</div>
+              <div class="test-meta">⏱ Duration: 18931ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">EMPLOYEE-REPORT / Employee</div>
+              <div class="test-title">TC_09. Create employee with empty first name - shows error</div>
+              <div class="test-meta">⏱ Duration: 14259ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">EMPLOYEE-REPORT / Employee</div>
+              <div class="test-title">TC_10. Create employee with empty last name - shows error</div>
+              <div class="test-meta">⏱ Duration: 14611ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">USER-REPORT / User</div>
+              <div class="test-title">TC_11. Navigate to Admin module</div>
+              <div class="test-meta">⏱ Duration: 13261ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">USER-REPORT / User</div>
+              <div class="test-title">TC_12. Verify Admin page loads with users table</div>
+              <div class="test-meta">⏱ Duration: 9089ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">USER-REPORT / User</div>
+              <div class="test-title">TC_13. Navigate to user creation form</div>
+              <div class="test-meta">⏱ Duration: 15850ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">USER-REPORT / User</div>
+              <div class="test-title">TC_14. Create user with empty username field - shows error</div>
+              <div class="test-meta">⏱ Duration: 21013ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">USER-REPORT / User</div>
+              <div class="test-title">TC_15. Verify password field masks input</div>
+              <div class="test-meta">⏱ Duration: 18114ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LEAVE-REPORT / Leave</div>
+              <div class="test-title">TC_16. Navigate to Leave module</div>
+              <div class="test-meta">⏱ Duration: 19928ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LEAVE-REPORT / Leave</div>
+              <div class="test-title">TC_17. Verify Leave page loads with table</div>
+              <div class="test-meta">⏱ Duration: 13641ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LEAVE-REPORT / Leave</div>
+              <div class="test-title">TC_18. Navigate to Apply Leave form</div>
+              <div class="test-meta">⏱ Duration: 13241ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LEAVE-REPORT / Leave</div>
+              <div class="test-title">TC_19. Verify leave form has required fields</div>
+              <div class="test-meta">⏱ Duration: 10304ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">LEAVE-REPORT / Leave</div>
+              <div class="test-title">TC_20. Navigate back from leave application</div>
+              <div class="test-meta">⏱ Duration: 8136ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLAIM-REPORT / Claim</div>
+              <div class="test-title">TC_21. Navigate to Dashboard</div>
+              <div class="test-meta">⏱ Duration: 13108ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLAIM-REPORT / Claim</div>
+              <div class="test-title">TC_22. Verify Claim module accessible and list loads</div>
+              <div class="test-meta">⏱ Duration: 13089ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLAIM-REPORT / Claim</div>
+              <div class="test-title">TC_23. Navigate to Submit Claim form</div>
+              <div class="test-meta">⏱ Duration: 10155ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLAIM-REPORT / Claim</div>
+              <div class="test-title">TC_24. Verify claim form has required fields</div>
+              <div class="test-meta">⏱ Duration: 13963ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLAIM-REPORT / Claim</div>
+              <div class="test-title">TC_25. Verify claim form cancel button</div>
+              <div class="test-meta">⏱ Duration: 10971ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLEANUP-REPORT / Cleanup</div>
+              <div class="test-title">TC_26. Navigate to Employee List for cleanup</div>
+              <div class="test-meta">⏱ Duration: 12378ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLEANUP-REPORT / Cleanup</div>
+              <div class="test-title">TC_27. Navigate to User List for cleanup</div>
+              <div class="test-meta">⏱ Duration: 8010ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLEANUP-REPORT / Cleanup</div>
+              <div class="test-title">TC_28. Navigate to Leave List for cleanup</div>
+              <div class="test-meta">⏱ Duration: 7689ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLEANUP-REPORT / Cleanup</div>
+              <div class="test-title">TC_29. Navigate to Claim List for cleanup</div>
+              <div class="test-meta">⏱ Duration: 7320ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+          <div class="test-item passed" data-state="passed">
+            <div class="test-status passed">
+              ✓
+            </div>
+            <div class="test-details">
+              <div class="test-suite">CLEANUP-REPORT / Cleanup</div>
+              <div class="test-title">TC_30. Verify Dashboard loaded after cleanup navigation</div>
+              <div class="test-meta">⏱ Duration: 11689ms | State: passed</div>
+              
+              
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    
+    <div class="footer">
+      <div>
+        <strong>🧪 Cypress Automation Framework v1.0 - Complete Execution Report</strong>
+      </div>
+      <p>All 30 tests from 6 module(s) executed and merged</p>
+      <p>Generated on <span class="timestamp">17/2/2026, 6:44:00 pm</span></p>
+      <p style="font-size: 0.85em; margin-top: 10px; color: #999;">Report File: execution-report.html & execution-report.json</p>
+    </div>
+  </div>
+  
+  <script>
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function filterTests(state) {
+      const container = document.getElementById('tests-container');
+      const items = container.querySelectorAll('.test-item');
+      let visibleCount = 0;
+      
+      items.forEach(item => {
+        if (state === 'all' || item.dataset.state === state) {
+          item.style.display = 'flex';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Update container title
+      const title = document.querySelector('.tests-section h2');
+      if (title) {
+        const stateLabel = state === 'all' ? 'Total' : state.charAt(0).toUpperCase() + state.slice(1);
+        title.textContent = `📊 Test Results - ${visibleCount} ${stateLabel} Tests`;
+      }
+    }
+    
+    // Initialize state
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Report loaded with 30 total tests');
+    });
+  </script>
+</body>
+</html>

@@ -16,7 +16,8 @@
     "baseUrl": "./",
     "types": ["cypress", "mocha", "node"],
     "paths": {
-      "@pages/*": ["cypress/pages/*"],
+      "@pageObjects/*": ["cypress/pageObjects/*"],
+      "@businessFunction/*": ["cypress/businessFunction/*"],
       "@fixtures/*": ["cypress/fixtures/*"],
       "@support/*": ["cypress/support/*"],
       "@testdata/*": ["cypress/test-data/*"]
